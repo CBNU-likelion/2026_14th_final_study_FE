@@ -6,6 +6,8 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // 페이지 이동 함수
@@ -39,20 +41,40 @@ export default function SignupPage() {
   };
 
   return (
-    <div>
-      <h1>회원가입</h1>
-      {error && <p style={{color: "red"}}>{error}</p>}
-      <form onSubmit={handleSignup}>
-        <input type="text" placeholder="이름" value={name}
-          onChange={(e) => setName(e.target.value)} />
-        <input type="email" placeholder="이메일" value={email}
-          onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="비밀번호" value={password}
-          onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit" disabled={loading}>
-          {loading ? "가입 중!" : "회원가입"}
-        </button>
-      </form>
+    <div className="wrapper">
+      <div className="card">
+        <h1>SIGN UP</h1>
+        {error && <p style={{color: "red"}}>{error}</p>}
+        <form onSubmit={handleSignup}>
+          <div className="input-style">
+            <label>이메일</label>
+            <input type="email" placeholder="email" value={email}
+              onChange={(e) => setEmail(e.target.value)} />
+          </div>
+
+          <div className="input-style">
+            <label>비밀번호</label>
+            <input type="password" placeholder="password" value={password}
+              onChange={(e) => setPassword(e.target.value)} />
+          </div>
+
+          <div className="input-style">
+            <label>이름</label>
+            <input type="text" placeholder="이름" value={name}
+              onChange={(e) => setName(e.target.value)} />
+          </div>
+
+          <div className="input-style">
+            <label>닉네임</label>
+            <input type="text" placeholder="닉네임" value={nickname}
+              onChange={(e) => setNickname(e.target.value)} />
+          </div>
+
+          <button className="primary-button" type="submit" disabled={loading}>
+            {loading ? "가입 중!" : "회원가입"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

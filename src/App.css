@@ -1,0 +1,122 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+}
+
+.wrapper {
+  /* 전체 화면을 채우고 카드를 가운데 정렬 */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff2ea;
+}
+
+.card {
+  width: 480px;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgb(255, 182, 72);
+  background: white;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card h1{
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.input-style{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-style label{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.input-style input{
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  font-size: 16px;
+  outline: none;
+}
+
+.primary-button{
+  width: 100%;
+  padding: 12px;
+  background: orange;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.primary-button:hover{
+  opacity: 0.7;
+}
+
+.primary-button:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sign-up{
+  display: flex;
+  float: right;
+  color: black;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.sign-up:hover{
+  opacity: 0.7;
+}
+
+.mypage-card{
+  width: 600px;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgb(255, 182, 72);
+  background: white;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mypage-card h1{
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.profile-info {
+  text-align: center;
+}
+
+.profile-info h2{
+  margin-top: 24px;
+}
+
+.profile-info p {
+  font-size: 14px;
+  color: #666;
+  margin: 4px 0px;
+}

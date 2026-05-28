@@ -4,6 +4,8 @@ import SignupPage from "./pages/SignupPage";
 import MyPage from "./pages/MyPage";
 import ForbiddenPage from "./pages/ForbiddenPage";
 
+import "./App.css";
+
 
 export default function App() {
   return (

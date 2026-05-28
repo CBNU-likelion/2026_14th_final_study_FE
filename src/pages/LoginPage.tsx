@@ -40,7 +40,7 @@ export default function LoginPage() {
 
       // 토큰 body, header로 주는 경우 커버
       const rawToken =
-        res.data.token || res.headers['authorization'];
+        res.data.accessToken || res.headers['authorization'];
 
       // 토큰 잘 들어 왔는지 체크
       if (!rawToken) {
@@ -52,6 +52,8 @@ export default function LoginPage() {
       const token = rawToken.startsWith('Bearer ')
         ? rawToken.slice(7)
         : rawToken;
+
+      console.log(token);
 
       // localStorage에 저장
       localStorage.setItem("accessToken", token);
@@ -79,30 +81,48 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>로그인</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {/* handleLogin 함수 연결 */}
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="이메일"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button 
-          type="submit"
-          disabled={loading}
-          >
-          {loading ? "로그인 중!" : "로그인"}
-        </button>
-      </form>
+    <div className="wrapper">
+      <div className="card">
+        <h1>LOGIN</h1>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {/* handleLogin 함수 연결 */}
+        <form onSubmit={handleLogin}>
+          <div className="input-style">
+            <label>이메일</label>
+            <input
+              type="email"
+              placeholder="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="input-style">
+            <label>비밀번호</label>
+            <input
+              type="password"
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <button 
+              className="primary-button"
+              type="submit"
+              disabled={loading}
+              >
+              {loading ? "로그인 중!" : "로그인"}
+            </button>
+            <p
+              className="sign-up"
+              onClick={() => navigate("/signup")}
+              >
+              회원가입
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

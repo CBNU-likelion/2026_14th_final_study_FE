@@ -53,17 +53,22 @@ export default function MyPage() {
 
 
   return (
-    <div>
-      <h1>마이페이지</h1>
-      {/* 에러가 있으면 에러 메시지 표시 */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {/* 유저 정보가 있으면 표시 */}
-      {userInfo && (
-        <div>
-          <p>이름: {userInfo.name}</p>
-          <p>이메일: {userInfo.email}</p>
-        </div>
-      )}
+    <div className="wrapper">
+      <div className="mypage-card">
+        <h1>마이페이지</h1>
+        {/* 에러가 있으면 에러 메시지 표시 */}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {/* 유저 정보가 있으면 표시 */}
+        {userInfo && (
+          <div className="profile-info">
+            <img width="128" height="128" src="https://img.icons8.com/color-pixels/64/lion.png" alt="lion"/>
+            <h2>안녕하세요! {userInfo.name}님!</h2>
+            <p>{userInfo.email}</p>
+
+            <button className="primary-button">로그아웃</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
