@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { login } from "../api/auth";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -8,32 +9,35 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+  try {
+    setErrorMessage("");
+
     if (!email || !password) {
       setErrorMessage("이메일과 비밀번호를 모두 입력해주세요.");
       return;
     }
 
-    const savedUser = localStorage.getItem("signupUser");
+    const response = await login({
+      email,
+      password,
+    });
 
-    if (!savedUser) {
-      setErrorMessage("가입된 회원 정보가 없습니다.");
-      return;
-    }
+    const accessToken = response.data.accessToken;
+    const user = response.data.user;
 
-    const user = JSON.parse(savedUser);
-
-    if (user.email !== email || user.password !== password) {
-      setErrorMessage("이메일 또는 비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    localStorage.setItem("accessToken", "mock-access-token");
+    localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("loginUser", JSON.stringify(user));
 
     alert("로그인되었습니다.");
     navigate("/mypage");
-  };
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || "로그인에 실패했습니다.";
+
+    setErrorMessage(message);
+  }
+};
 
   return (
     <main style={pageStyle}>
