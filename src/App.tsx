@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import MyPage from "./pages/MyPage";
+import ForbiddenPage from "./pages/ForbiddenPage";
 
 function Layout() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
           <Route path="mypage" element={<MyPage />} />
+          <Route path="forbidden" element={<ForbiddenPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
