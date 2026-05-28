@@ -1,18 +1,39 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getMyInfo, logout } from "../api/auth";
 
 export default function MyPage() {
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
 
-  const loginUser = localStorage.getItem("loginUser");
-  const user = loginUser ? JSON.parse(loginUser) : null;
+  useEffect(() => {
+  const fetchMyInfo = async () => {
+    try {
+      const response = await getMyInfo();
 
-  const handleLogout = () => {
+      setUser(response.data);
+    } catch (error) {
+      console.error(error);
+      navigate("/");
+    }
+  };
+
+  fetchMyInfo();
+}, []);
+
+  const handleLogout = async () => {
+  try {
+    await logout();
+
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("loginUser");
 
     alert("로그아웃되었습니다.");
+
     navigate("/");
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   if (!user) {
     return (
