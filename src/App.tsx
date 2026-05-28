@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
 
 function Layout() {
   return (
@@ -28,6 +29,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
         </Route>
       </Routes>
