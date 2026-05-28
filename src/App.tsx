@@ -9,7 +9,11 @@ function Layout() {
   return (
     <div>
       <header>
-        <h1>LIKELION WEEK8 ASSIGNMENT WEBSITE</h1>
+        <h1>
+          <a style={{ textDecorationLine: "none", color: "black" }} href="/">
+            LIKELION WEEK8 ASSIGNMENT WEBSITE
+          </a>
+        </h1>
         <hr />
       </header>
 
