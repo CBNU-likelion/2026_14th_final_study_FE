@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import SignupPage from "./pages/SignupPage";
 
 function Layout() {
   return (
@@ -27,7 +28,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          {/* 페이지 라우트는 여기에 추가 */}
+          <Route path="signup" element={<SignupPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
