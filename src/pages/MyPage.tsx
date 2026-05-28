@@ -23,6 +23,7 @@ export default function MyPage() {
 
         // 토큰 없으면 바로 로그인 페이지로 이동
         if (!token) {
+          alert("로그인이 필요합니다.");
           navigate("/login");
           return;
         }
@@ -37,8 +38,12 @@ export default function MyPage() {
       }catch(err: any){
         const status = err.response?.status;
         if(status === 401){
+          alert("인증이 만료되었습니다. 다시 로그인해주세요.")
           navigate("/login");
-        }else{
+        }else if(status === 403){
+          navigate("/forbidden");
+        }
+        else{
           setError("서버 오류가 발생했습니다.");
         }
       }

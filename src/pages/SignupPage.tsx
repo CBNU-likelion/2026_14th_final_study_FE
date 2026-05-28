@@ -29,7 +29,6 @@ export default function SignupPage() {
       const status = err.response?.status;
 
       if(status === 400){
-        // 400 Bad Request: 이미 존재하는 이메일
         setError("이미 존재하는 이메일입니다.");
       }else{
         setError("서버 오류가 발생했습니다.");
