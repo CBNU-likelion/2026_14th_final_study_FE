@@ -12,41 +12,48 @@ export default function SignupPage() {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
- const handleSignup = async () => {
-  try {
-    setErrorMessage("");
+  const handleSignup = async () => {
+    try {
+      setErrorMessage("");
 
-    if (!name || !email || !password || !passwordCheck) {
-      setErrorMessage("모든 항목을 입력해주세요.");
-      return;
+      if (!name || !email || !password || !passwordCheck) {
+        setErrorMessage("모든 항목을 입력해주세요.");
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(email)) {
+        setErrorMessage("올바른 이메일 형식으로 입력해주세요.");
+        return;
+      }
+
+      if (password.length < 8) {
+        setErrorMessage("비밀번호는 최소 8자 이상이어야 합니다.");
+        return;
+      }
+
+      if (password !== passwordCheck) {
+        setErrorMessage("비밀번호가 일치하지 않습니다.");
+        return;
+      }
+
+      await signup({
+        email,
+        password,
+        passwordConfirm: passwordCheck,
+        name,
+      });
+
+      alert("회원가입이 완료되었습니다.");
+      navigate("/");
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || "회원가입에 실패했습니다.";
+
+      setErrorMessage(message);
     }
-
-    if (password.length < 8) {
-      setErrorMessage("비밀번호는 최소 8자 이상이어야 합니다.");
-      return;
-    }
-
-    if (password !== passwordCheck) {
-      setErrorMessage("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    await signup({
-      email,
-      password,
-      passwordConfirm: passwordCheck,
-      name,
-    });
-
-    alert("회원가입이 완료되었습니다.");
-    navigate("/");
-  } catch (error: any) {
-    const message =
-      error.response?.data?.message || "회원가입에 실패했습니다.";
-
-    setErrorMessage(message);
-  }
-};
+  };
 
   return (
     <main style={pageStyle}>
