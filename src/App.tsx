@@ -3,6 +3,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import MyPage from "./pages/MyPage";
 import ForbiddenPage from "./pages/ForbiddenPage";
+import Root from "./pages/Root";
 
 function Layout() {
   return (
@@ -31,6 +32,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route path="" element={<Root />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
           <Route path="mypage" element={<MyPage />} />
