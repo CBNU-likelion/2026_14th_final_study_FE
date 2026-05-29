@@ -41,7 +41,9 @@ function MyPage() {
         } else if (response.status === 400) {
           alert("잘못된 요청입니다.");
         } else {
-          alert("알 수 없는 오류가 발생했습니다.");
+          const data = await response.json();
+          alert("오류가 발생했습니다: " + data["message"]);
+          console.error(data);
         }
       } catch {
         alert("서버와 통신 중 오류가 발생했습니다.");
