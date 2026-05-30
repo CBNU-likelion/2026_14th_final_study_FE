@@ -6,19 +6,21 @@ import type { AxiosError } from 'axios'
 interface FormFields {
   email: string
   password: string
+  confirmPassword: string
   name: string
 }
 
 interface FormErrors {
   email?: string
   password?: string
+  confirmPassword?: string
   name?: string
 }
 
 export default function SignupPage() {
   const { signup } = useAuth()
 
-  const [fields, setFields] = useState<FormFields>({ email: '', password: '', name: '' })
+  const [fields, setFields] = useState<FormFields>({ email: '', password: '', confirmPassword: '', name: '' })
   const [errors, setErrors] = useState<FormErrors>({})
   const [serverError, setServerError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -45,6 +47,11 @@ export default function SignupPage() {
     } else if (fields.password.length < 6) {
       next.password = '비밀번호는 6자 이상이어야 합니다.'
     }
+    if (!fields.confirmPassword) {
+      next.confirmPassword = '비밀번호 확인을 입력해주세요.'
+    } else if (fields.password !== fields.confirmPassword) {
+      next.confirmPassword = '비밀번호가 일치하지 않습니다.'
+    }
     setErrors(next)
     return Object.keys(next).length === 0
   }
@@ -55,7 +62,8 @@ export default function SignupPage() {
 
     setLoading(true)
     try {
-      await signup(fields)
+      const { confirmPassword: _, ...signupData } = fields
+      await signup(signupData)
     } catch (err) {
       const axiosErr = err as AxiosError<{ message?: string }>
       const status = axiosErr.response?.status
@@ -142,6 +150,33 @@ export default function SignupPage() {
               }`}
             />
             {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              비밀번호 확인
+            </label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="비밀번호를 다시 입력해주세요"
+              value={fields.confirmPassword}
+              onChange={handleChange}
+              className={`w-full px-4 py-2.5 rounded-lg border text-gray-900 placeholder-gray-400 text-sm outline-none transition-all ${
+                errors.confirmPassword
+                  ? 'border-red-400 bg-red-50 focus:ring-2 focus:ring-red-300'
+                  : fields.confirmPassword && fields.password === fields.confirmPassword
+                  ? 'border-green-400 bg-white focus:ring-2 focus:ring-green-300'
+                  : 'border-gray-300 bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400'
+              }`}
+            />
+            {errors.confirmPassword && (
+              <p className="mt-1 text-xs text-red-500">{errors.confirmPassword}</p>
+            )}
+            {!errors.confirmPassword && fields.confirmPassword && fields.password === fields.confirmPassword && (
+              <p className="mt-1 text-xs text-green-500">비밀번호가 일치합니다.</p>
+            )}
           </div>
 
           <button
