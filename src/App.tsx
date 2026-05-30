@@ -1,9 +1,21 @@
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet, useNavigate } from "react-router-dom";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import MyPage from "./pages/MyPage";
 import ForbiddenPage from "./pages/ForbiddenPage";
 import Root from "./pages/Root";
+
+function Navbar() {
+  const navigate = useNavigate();
+  return (
+    <nav>
+      <button type="button" onClick={() => navigate("/")}>메인 페이지</button>
+      <button type="button" onClick={() => navigate("/login")}>로그인</button>
+      <button type="button" onClick={() => navigate("/signup")}>회원가입</button>
+      <button type="button" onClick={() => navigate("/mypage")}>마이페이지</button>
+    </nav>
+  );
+}
 
 function Layout() {
   return (
@@ -14,6 +26,7 @@ function Layout() {
             LIKELION WEEK8 ASSIGNMENT WEBSITE
           </a>
         </h1>
+        <Navbar />
         <hr />
       </header>
 

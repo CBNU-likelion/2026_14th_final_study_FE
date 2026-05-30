@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiFetch } from "../utils/apiFetch";
 
 interface UserInfo {
   userId: number;
@@ -15,32 +16,19 @@ function MyPage() {
     const fetchUserInfo = async () => {
       const token = localStorage.getItem("accessToken");
       if (!token) {
-        alert("로그인이 필요합니다.");
-        navigate("/login");
+        navigate("/forbidden");
         return;
       }
 
       try {
-        const response = await fetch("/api/users/me", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await apiFetch("/api/users/me");
 
         if (response.ok) {
           const data: UserInfo = await response.json();
           setUserInfo(data);
-        } else if (response.status === 401) {
-          alert("인증이 만료되었습니다. 다시 로그인해주세요.");
-          localStorage.removeItem("accessToken");
-          navigate("/login");
-        } else if (response.status === 403) {
-          alert("접근 권한이 없습니다.");
-          navigate("/forbidden");
         } else if (response.status === 400) {
           alert("잘못된 요청입니다.");
-        } else {
+        } else if (response.status !== 401 && response.status !== 403) {
           const data = await response.json();
           alert("오류가 발생했습니다: " + data["message"]);
           console.error(data);
