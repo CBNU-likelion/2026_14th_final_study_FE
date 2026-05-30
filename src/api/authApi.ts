@@ -15,7 +15,7 @@ import {
 
 // axios 인스턴스 생성 (base URL 설정)
 const api = axios.create({
-  baseURL: "/api", // vite.config.ts에서 프록시로 실제 서버로 연결
+  baseURL: import.meta.env.VITE_API_BASE_URL, // vite.config.ts에서 프록시로 실제 서버로 연결
   headers: {
     "Content-Type": "application/json",
   },
