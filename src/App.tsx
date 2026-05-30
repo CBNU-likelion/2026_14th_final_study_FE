@@ -10,7 +10,7 @@ function Layout() {
     <div>
       <header>
         <h1>
-          <a style={{ textDecorationLine: "none", color: "black" }} href="/">
+          <a style={{ color: "black" }} href="/">
             LIKELION WEEK8 ASSIGNMENT WEBSITE
           </a>
         </h1>
