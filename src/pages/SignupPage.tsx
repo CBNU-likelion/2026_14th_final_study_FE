@@ -7,20 +7,20 @@ interface FormFields {
   email: string
   password: string
   confirmPassword: string
-  name: string
+  nickname: string
 }
 
 interface FormErrors {
   email?: string
   password?: string
   confirmPassword?: string
-  name?: string
+  nickname?: string
 }
 
 export default function SignupPage() {
   const { signup } = useAuth()
 
-  const [fields, setFields] = useState<FormFields>({ email: '', password: '', confirmPassword: '', name: '' })
+  const [fields, setFields] = useState<FormFields>({ email: '', password: '', confirmPassword: '', nickname: '' })
   const [errors, setErrors] = useState<FormErrors>({})
   const [serverError, setServerError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -34,8 +34,8 @@ export default function SignupPage() {
 
   const validate = (): boolean => {
     const next: FormErrors = {}
-    if (!fields.name.trim()) {
-      next.name = '이름을 입력해주세요.'
+    if (!fields.nickname.trim()) {
+      next.nickname = '닉네임을 입력해주세요.'
     }
     if (!fields.email.trim()) {
       next.email = '이메일을 입력해주세요.'
@@ -62,7 +62,7 @@ export default function SignupPage() {
 
     setLoading(true)
     try {
-      const { confirmPassword: _, ...signupData } = fields
+      const { confirmPassword: _confirm, ...signupData } = fields
       await signup(signupData)
     } catch (err) {
       const axiosErr = err as AxiosError<{ message?: string }>
@@ -93,23 +93,23 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5" noValidate>
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              이름
+            <label htmlFor="nickname" className="block text-sm font-medium text-gray-700 mb-1">
+              닉네임
             </label>
             <input
-              id="name"
-              name="name"
+              id="nickname"
+              name="nickname"
               type="text"
-              placeholder="홍길동"
-              value={fields.name}
+              placeholder="닉네임을 입력해주세요"
+              value={fields.nickname}
               onChange={handleChange}
               className={`w-full px-4 py-2.5 rounded-lg border text-gray-900 placeholder-gray-400 text-sm outline-none transition-all ${
-                errors.name
+                errors.nickname
                   ? 'border-red-400 bg-red-50 focus:ring-2 focus:ring-red-300'
                   : 'border-gray-300 bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400'
               }`}
             />
-            {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+            {errors.nickname && <p className="mt-1 text-xs text-red-500">{errors.nickname}</p>}
           </div>
 
           <div>
