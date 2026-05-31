@@ -8,7 +8,7 @@ export default defineConfig({
       // /api로 시작하는 요청을 실제 백엔드 서버로 우회
       "/api": {
         target: "http://15.164.100.139:8080",
-        changeOrigin: true, // 호스트 헤더를 target으로 변경
+        changeOrigin: true,
       },
     },
   },
