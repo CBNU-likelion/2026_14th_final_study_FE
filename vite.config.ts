@@ -7,7 +7,7 @@ export default defineConfig({
     proxy: {
       // /api로 시작하는 요청을 실제 백엔드 서버로 우회
       "/api": {
-        target: process.env.VITE_API_BASE_URL, // 백엔드 실제 주소
+        target: "http://13.209.89.32:8080",
         changeOrigin: true, // 호스트 헤더를 target으로 변경
       },
     },
