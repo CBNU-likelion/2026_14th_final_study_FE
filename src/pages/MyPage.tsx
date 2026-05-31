@@ -14,7 +14,6 @@ export default function MyPage() {
     getMyInfoApi()
       .then((res) => setUserInfo(res.data.result))
       .catch(() => {
-        // API 실패 시(백엔드 미완성 등) 로그인 시 저장한 이메일로 폴백
         if (userEmail) setUserInfo({ email: userEmail, name: '' })
         else setError('회원 정보를 불러오지 못했습니다.')
       })
