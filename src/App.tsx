@@ -173,7 +173,7 @@ function App() {
     exp? : number;
   };
 
-  const updateTokenRemainingTime = () => {
+  const updateTokenRemainingTime = async () => {
   const token = localStorage.getItem("accessToken");
 
   if (!token) {
@@ -192,14 +192,19 @@ function App() {
     const remainingSeconds = decoded.exp - Math.floor(Date.now() / 1000);
 
     if (remainingSeconds <= 0) {
-      setTokenRemainingTime("만료됨");
+      setTokenRemainingTime("토큰 재발급 중...");
+
+      const valid = await isTokenValid();
+
+      if (valid) {
+        updateTokenTimeInfo();
+        return;
+      }
 
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-
       window.history.replaceState(null, "", "/");
       setPage("login");
-
       alert("토큰이 만료되었습니다. 다시 로그인해주세요.");
       return;
     }
@@ -344,10 +349,10 @@ function App() {
       return;
     }
 
-    updateTokenRemainingTime();
+    void updateTokenRemainingTime();
 
     const timer = setInterval(() => {
-      updateTokenRemainingTime();
+      void updateTokenRemainingTime();
     }, 1000);
 
   return () => {
