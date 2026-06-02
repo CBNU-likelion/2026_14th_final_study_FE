@@ -7,7 +7,7 @@ export default defineConfig({
     proxy: {
       // /api로 시작하는 요청을 실제 백엔드 서버로 우회
       "/api": {
-        target: "http://15.164.100.139:8080",
+        target: "https://202614thfinalstudybe-production-0389.up.railway.app",
         changeOrigin: true,
       },
     },
