@@ -16,8 +16,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 기본 경로는 로그인 페이지로 이동 */}
-        <Route path="/" element={<Navigate to="/login" />} />
+        {/* 기본 경로는 토큰 유무에 따라 마이페이지 또는 로그인으로 이동 */}
+        <Route path="/" element={<Navigate to={getAccessToken() ? "/mypage" : "/login"} />} />
 
         {/* 로그인 페이지 */}
         <Route path="/login" element={<Login />} />
