@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://202614thfinalstudybe-production-0389.up.railway.app/:path*"
+    },
+    {
+      "source": "/((?!api).*)",
+      "destination": "/index.html"
     }
   ]
 }
