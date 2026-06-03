@@ -1,3 +1,6 @@
+import http from "node:http";
+import https from "node:https";
+
 const API_ORIGIN = "http://54.180.114.77:8080";
 
 const hopByHopHeaders = new Set([
@@ -14,43 +17,72 @@ const hopByHopHeaders = new Set([
   "content-encoding",
 ]);
 
-export default async function handler(request, response) {
+export default function handler(request, response) {
   const path = Array.isArray(request.query.path)
     ? request.query.path.join("/")
     : request.query.path;
   const search = new URL(request.url, "http://localhost").search;
-  const targetUrl = `${API_ORIGIN}/api/v1/${path ?? ""}${search}`;
+  const targetUrl = new URL(`${API_ORIGIN}/api/v1/${path ?? ""}${search}`);
 
-  try {
-    const headers = new Headers();
+  const headers = {};
 
-    for (const [key, value] of Object.entries(request.headers)) {
-      if (!hopByHopHeaders.has(key.toLowerCase()) && key.toLowerCase() !== "origin") {
-        headers.set(key, Array.isArray(value) ? value.join(",") : value);
-      }
+  for (const [key, value] of Object.entries(request.headers)) {
+    if (!hopByHopHeaders.has(key.toLowerCase()) && key.toLowerCase() !== "origin") {
+      headers[key] = value;
     }
+  }
 
-    const backendResponse = await fetch(targetUrl, {
+  const client = targetUrl.protocol === "https:" ? https : http;
+
+  const proxyRequest = client.request(
+    {
+      protocol: targetUrl.protocol,
+      hostname: targetUrl.hostname,
+      port: targetUrl.port,
+      path: `${targetUrl.pathname}${targetUrl.search}`,
       method: request.method,
       headers,
-      body: ["GET", "HEAD"].includes(request.method) ? undefined : request,
-      duplex: "half",
-    });
+      timeout: 25000,
+    },
+    (proxyResponse) => {
+      response.statusCode = proxyResponse.statusCode ?? 502;
 
-    response.status(backendResponse.status);
-
-    backendResponse.headers.forEach((value, key) => {
-      if (!hopByHopHeaders.has(key.toLowerCase())) {
-        response.setHeader(key, value);
+      for (const [key, value] of Object.entries(proxyResponse.headers)) {
+        if (!hopByHopHeaders.has(key.toLowerCase()) && value !== undefined) {
+          response.setHeader(key, value);
+        }
       }
+
+      proxyResponse.pipe(response);
+    }
+  );
+
+  proxyRequest.on("timeout", () => {
+    proxyRequest.destroy(new Error("API proxy timed out"));
+  });
+
+  proxyRequest.on("error", (error) => {
+    console.error("API proxy failed", {
+      message: error.message,
+      code: error.code,
+      target: targetUrl.href,
     });
 
-    const body = Buffer.from(await backendResponse.arrayBuffer());
-    response.send(body);
-  } catch (error) {
-    console.error("API proxy failed", error);
-    response.status(502).json({
-      message: "Failed to connect to API server.",
-    });
+    if (!response.headersSent) {
+      response.status(502).json({
+        message: "Failed to connect to API server.",
+        code: error.code,
+      });
+      return;
+    }
+
+    response.end();
+  });
+
+  if (["GET", "HEAD"].includes(request.method)) {
+    proxyRequest.end();
+    return;
   }
+
+  request.pipe(proxyRequest);
 }
