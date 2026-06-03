@@ -1,8 +1,7 @@
 {
-  "regions": ["icn1"],
   "rewrites": [
     {
-      "source": "/:path*",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]

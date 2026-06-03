@@ -1,10 +1,6 @@
 const API_ORIGIN = "http://54.180.114.77:8080";
 const API_TIMEOUT_MS = 8000;
 
-export const config = {
-  runtime: "nodejs",
-};
-
 const excludedRequestHeaders = new Set([
   "connection",
   "content-length",
@@ -30,14 +26,13 @@ async function readBody(request) {
   return Buffer.concat(chunks);
 }
 
-export default async function handler(request, response) {
-  try {
-    const path = Array.isArray(request.query.path)
-      ? request.query.path.join("/")
-      : request.query.path;
-    const search = new URL(request.url, "http://localhost").search;
-    const targetUrl = `${API_ORIGIN}/api/v1/${path ?? ""}${search}`;
+export async function proxyRequest(request, response, targetPath) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
 
+  try {
+    const search = new URL(request.url, "http://localhost").search;
+    const targetUrl = `${API_ORIGIN}${targetPath}${search}`;
     const headers = {};
 
     for (const [key, value] of Object.entries(request.headers)) {
@@ -46,10 +41,7 @@ export default async function handler(request, response) {
       }
     }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
     const hasBody = !["GET", "HEAD"].includes(request.method ?? "GET");
-
     const backendResponse = await fetch(targetUrl, {
       method: request.method,
       headers,
@@ -57,7 +49,6 @@ export default async function handler(request, response) {
       signal: controller.signal,
     });
 
-    clearTimeout(timeout);
     response.statusCode = backendResponse.status;
 
     backendResponse.headers.forEach((value, key) => {
@@ -77,5 +68,7 @@ export default async function handler(request, response) {
         detail: error?.message,
       })
     );
+  } finally {
+    clearTimeout(timeout);
   }
 }
