@@ -4,6 +4,23 @@ import { jwtDecode } from "jwt-decode";
 
 type Page = "login" | "mypage" | "signup" | "error401" | "error403";
 
+type AuthResponse = {
+  accessToken?: string;
+  token?: string;
+  refreshToken?: string;
+  data?: AuthResponse;
+  result?: AuthResponse;
+};
+
+const getAuthTokens = (responseData: AuthResponse) => {
+  const tokenData = responseData.data ?? responseData.result ?? responseData;
+
+  return {
+    accessToken: tokenData.accessToken ?? tokenData.token,
+    refreshToken: tokenData.refreshToken,
+  };
+};
+
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -84,8 +101,7 @@ function App() {
         password,
       });
 
-      const accessToken = response.data.accessToken ?? response.data.token;      
-      const refreshToken = response.data.refreshToken;
+      const { accessToken, refreshToken } = getAuthTokens(response.data);
 
       if (!accessToken) {
         alert("로그인 응답에 토큰이 없습니다.");
@@ -285,7 +301,7 @@ function App() {
           const response = await axios.post("/api/v1/auth/reissue", {
             refreshToken,
           });        
-          const newAccessToken = response.data.accessToken ?? response.data.token;
+          const { accessToken: newAccessToken } = getAuthTokens(response.data);
 
           if (!newAccessToken) {
             return false;
