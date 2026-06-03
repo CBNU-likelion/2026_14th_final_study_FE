@@ -96,7 +96,7 @@ function App() {
       }
 
     try {
-      const response = await axios.post("/api/v1/auth/login", {
+      const response = await axios.post("/server/v1/auth/login", {
         email,
         password,
       });
@@ -168,7 +168,7 @@ function App() {
   }
 
     try {
-      const response = await axios.post("/api/v1/auth/signup", {
+      const response = await axios.post("/server/v1/auth/signup", {
         email,
         password,
         nickname,
@@ -298,7 +298,7 @@ function App() {
         }
 
         try {
-          const response = await axios.post("/api/v1/auth/reissue", {
+          const response = await axios.post("/server/v1/auth/reissue", {
             refreshToken,
           });        
           const { accessToken: newAccessToken } = getAuthTokens(response.data);
@@ -340,7 +340,7 @@ function App() {
   try {
     const token = localStorage.getItem("accessToken");
 
-    const response = await axios.get("/api/v1/users/me", {
+    const response = await axios.get("/server/v1/users/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

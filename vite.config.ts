@@ -9,6 +9,11 @@ export default defineConfig({
           target: 'http://54.180.114.77:8080', 
           changeOrigin: true, 
         } ,
+        '/server': {
+          target: 'http://54.180.114.77:8080',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/server/, '/api'),
+        },
       },
     },
 });
