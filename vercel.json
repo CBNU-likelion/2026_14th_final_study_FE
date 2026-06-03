@@ -1,26 +1,12 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/server/health",
-      "dest": "/api/server/health"
+      "source": "/server/:path*",
+      "destination": "/api/server/:path*"
     },
     {
-      "src": "/server/v1/auth/login",
-      "dest": "/api/server/v1/auth/login"
-    },
-    {
-      "src": "/server/v1/auth/signup",
-      "dest": "/api/server/v1/auth/signup"
-    },
-    {
-      "src": "/server/v1/auth/reissue",
-      "dest": "/api/server/v1/auth/reissue"
-    },
-    {
-      "src": "/server/v1/users/me",
-      "dest": "/api/server/v1/users/me"
-    },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+      "source": "/:path*",
+      "destination": "/index.html"
+    }
   ]
 }
