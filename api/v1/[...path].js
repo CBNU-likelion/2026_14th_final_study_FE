@@ -1,4 +1,9 @@
 const API_ORIGIN = "http://54.180.114.77:8080";
+const API_TIMEOUT_MS = 8000;
+
+export const config = {
+  runtime: "nodejs",
+};
 
 const excludedRequestHeaders = new Set([
   "connection",
@@ -42,7 +47,7 @@ export default async function handler(request, response) {
     }
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 25000);
+    const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
     const hasBody = !["GET", "HEAD"].includes(request.method ?? "GET");
 
     const backendResponse = await fetch(targetUrl, {
